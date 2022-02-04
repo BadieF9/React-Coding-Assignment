@@ -3,11 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AddTasks from './screens/AddTasks';
 import Tasks from './screens/Tasks';
 import { useEffect } from 'react';
+import tasksStorage from './sessions/tasksStorage';
 
 function App() {
 
   useEffect(() => {
-    if(!localStorage.getItem('tasks')) localStorage.setItem('tasks', '[{}]')
+    const tasks = tasksStorage().getTasks();
+    if(!tasks) tasksStorage().setTasks([])
   })
   return (
       <BrowserRouter>

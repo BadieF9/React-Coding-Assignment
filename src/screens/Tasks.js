@@ -1,12 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
-import { Dropdown } from 'react-bootstrap';
-
+import tasksStorage from '../sessions/tasksStorage';
+import editLogo from '../img/edit-solid.svg';
+import { useNavigate } from 'react-router-dom';
 const Tasks = () => {
-  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem('tasks')))
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks])
+  const [tasks, setTasks] = useState(tasksStorage().getTasks())
+  const navigate = useNavigate()
+
+  const taskStatusChaneHandler = (e, index) => {
+    setTasks((prevTask) => {
+      prevTask[index].group = e.target.value.toLowerCase()
+      tasksStorage().setTasks(prevTask)
+      return prevTask
+    })
+  }
+
+  const editTask = (index) => {
+    navigate('/add-tasks', {state: {
+      index: index
+    }})
+  }
+
   return (
     <>
       <Header>
@@ -14,27 +28,26 @@ const Tasks = () => {
       </Header>
       <div className='container tasks-container'>
         <div className='cards'>
-          {/* {tasks.map((task, index) => {
-            <div className='card'>
-            <div className='car-body'>
-              <h4 className='card-title'>Title</h4>
-              <p className='card-desc'>hello world this is a description</p>
-            </div>
-            <div className='card-footer'>
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  Dropdown Button
-                </Dropdown.Toggle>
+          {console.log(tasks)}
+          {tasks !== null && tasks.map((task, index) => (
+            <div className='card' key={index}>
+              <div className='car-body'>
+                <h4 className='card-title'>{task.title}</h4>
+                <p className='card-desc'>{task.description}</p>
+              </div>
 
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <div className='card-footer d-flex justify-content-between'>
+                <select className='select' onChange={(e) => taskStatusChaneHandler(e, index)}>
+                  <option selected={task.group === 'todo'}>ToDo</option>
+                  <option selected={task.group === 'inprogress'}>InProgress</option>
+                  <option selected={task.group === 'inqa'}>InQA</option>
+                  <option selected={task.group === 'done'}>Done</option>
+                </select>
+                <img src={editLogo} className='logo-edit' onClick={() => editTask(index)}/>
+              </div>
+                  <i className='fas fa-edit'></i>
             </div>
-          </div>
-          })} */}
+          ))}
         </div>
         
       </div>

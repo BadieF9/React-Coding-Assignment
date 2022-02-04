@@ -37,6 +37,10 @@ a {
   left: 0;
 }
 
+.header .container p {
+  margin: 0;
+}
+
 .header a {
   color: #fff;
 }
@@ -81,4 +85,21 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5vw;
+}
+
+.logo-edit {
+  width: 17%;
+}
+
+.select {
+  border: 1px solid #ced4da;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 0.24rem;
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.card-footer {
+  padding: 0.5rem;
 }
